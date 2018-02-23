@@ -1,5 +1,5 @@
--- Object = require 'lib/classic/classic'
 Object = require 'lib/classic/classic'
+Input = require 'lib/boipushy/input'
 
 function love.load()
     local object_files = {}
@@ -7,12 +7,11 @@ function love.load()
     requireFiles(object_files)
 
     circle = HyperCircle(400, 300, 50, 10, 120)
-
 end
 
 function requireFiles(files)
     for _, file in ipairs(files) do
-        print (file)
+        print(file)
         local file = file:sub(1, -5)
         require(file)
     end
@@ -32,4 +31,20 @@ end
 
 function love.draw()
     circle:draw()
+end
+
+function love.keypressed(key)
+    print("main.lua<love.keypressed> key: " .. key)
+end
+
+function love.keyreleased(key)
+    print("main.lua<love.keyreleased> key: " .. key)
+end
+
+function love.mousepressed(x, y, button)
+    print("main.lua<love.mousepressed> button: " .. button)
+end
+
+function love.mousereleased(x, y, button)
+    print("main.lua<love.mousereleased> button: " .. button)
 end
