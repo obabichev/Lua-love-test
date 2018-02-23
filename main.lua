@@ -6,6 +6,9 @@ function love.load()
     recursiveEnumerate('objects', object_files)
     requireFiles(object_files)
 
+    input = Input()
+    input:bind('mouse1', 'test')
+
     circle = HyperCircle(400, 300, 50, 10, 120)
 end
 
@@ -29,22 +32,10 @@ function recursiveEnumerate(folder, file_list)
     end
 end
 
+function love.update(dt)
+    if input:pressed('test') then print('Mouse1 click') end
+end
+
 function love.draw()
     circle:draw()
-end
-
-function love.keypressed(key)
-    print("main.lua<love.keypressed> key: " .. key)
-end
-
-function love.keyreleased(key)
-    print("main.lua<love.keyreleased> key: " .. key)
-end
-
-function love.mousepressed(x, y, button)
-    print("main.lua<love.mousepressed> button: " .. button)
-end
-
-function love.mousereleased(x, y, button)
-    print("main.lua<love.mousereleased> button: " .. button)
 end
