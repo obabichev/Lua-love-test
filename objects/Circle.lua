@@ -5,7 +5,6 @@ function Circle:new(x, y, radius)
     self.y = y
     self.radius = radius
     self.creation_time = love.timer.getTime()
-    return setmetatable(self, Circle)
 end
 
 function Circle:update(dt)

@@ -6,7 +6,7 @@ function love.load()
     recursiveEnumerate('objects', object_files)
     requireFiles(object_files)
 
-    circle = Circle:new(400, 300, 50)
+    circle = HyperCircle(400, 300, 50, 10, 120)
 
 end
 
@@ -31,6 +31,5 @@ function recursiveEnumerate(folder, file_list)
 end
 
 function love.draw()
-    love.graphics.print("Hello World", 400, 300)
     circle:draw()
 end
