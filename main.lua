@@ -1,10 +1,13 @@
 Object = require 'lib/classic/classic'
 Input = require 'lib/boipushy/input'
+Timer = require 'lib/hump/timer'
 
 function love.load()
     local object_files = {}
     recursiveEnumerate('objects', object_files)
     requireFiles(object_files)
+
+    timer = Timer()
 
     input = Input()
     input:bind('mouse1', 'test')
@@ -33,6 +36,7 @@ function recursiveEnumerate(folder, file_list)
 end
 
 function love.update(dt)
+    timer:update(dt)
     if input:pressed('test') then print('Mouse1 click') end
 end
 
