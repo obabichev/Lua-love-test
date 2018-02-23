@@ -8,11 +8,22 @@ function love.load()
     requireFiles(object_files)
 
     timer = Timer()
-
     input = Input()
-    input:bind('mouse1', 'test')
 
-    circle = HyperCircle(400, 300, 50, 10, 120)
+    current_room = nil
+end
+
+function love.update(dt)
+    timer:update(dt)
+    if current_room then current_room:update(dt) end
+end
+
+function love.draw()
+    if current_room then current_room:draw() end
+end
+
+function gotoRoom(room_type, ...)
+    current_room = _G[room_type](...)
 end
 
 function requireFiles(files)
@@ -33,13 +44,4 @@ function recursiveEnumerate(folder, file_list)
             recursiveEnumerate(file, file_list)
         end
     end
-end
-
-function love.update(dt)
-    timer:update(dt)
-    if input:pressed('test') then print('Mouse1 click') end
-end
-
-function love.draw()
-    circle:draw()
 end
