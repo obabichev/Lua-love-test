@@ -3,14 +3,18 @@ Input = require 'lib/boipushy/input'
 Timer = require 'lib/hump/timer'
 
 function love.load()
+    love.graphics.setDefaultFilter('nearest')
+
     local object_files = {}
     recursiveEnumerate('objects', object_files)
     requireFiles(object_files)
 
+    resize(3)
+
     timer = Timer()
     input = Input()
 
-    current_room = nil
+    current_room = Stage()
 end
 
 function love.update(dt)
@@ -44,4 +48,9 @@ function recursiveEnumerate(folder, file_list)
             recursiveEnumerate(file, file_list)
         end
     end
+end
+
+function resize(s)
+    love.window.setMode(s * gw, s * gh)
+    sx, sy = s, s
 end
