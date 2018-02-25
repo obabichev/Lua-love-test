@@ -30,3 +30,7 @@ function Player:draw()
     love.graphics.circle('line', self.x, self.y, self.w)
     love.graphics.line(self.x, self.y, self.x + 2 * self.w * math.cos(self.r), self.y + 2 * self.w * math.sin(self.r))
 end
+
+function Player:destroy()
+    Player.super.destroy(self)
+end

@@ -18,3 +18,10 @@ end
 
 function GameObject:draw()
 end
+
+function GameObject:destroy()
+--    self.timer:destroy()
+    self.timer = nil
+    if self.collider then self.collider:destroy() end
+    self.collider = nil
+end
