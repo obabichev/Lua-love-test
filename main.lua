@@ -1,6 +1,8 @@
 Object = require 'lib/classic/classic'
 Input = require 'lib/boipushy/input'
 Timer = require 'lib/hump/timer'
+Camera = require 'lib/hump/camera'
+Physics = require 'lib/windfield/windfield/init'
 
 function love.load()
     love.graphics.setDefaultFilter('nearest')
@@ -9,16 +11,21 @@ function love.load()
     recursiveEnumerate('objects', object_files)
     requireFiles(object_files)
 
-    resize(3)
+    resize(2)
 
     timer = Timer()
     input = Input()
+    camera = Camera()
 
     current_room = Stage()
+
+    input:bind('left', 'left')
+    input:bind('right', 'right')
 end
 
 function love.update(dt)
     timer:update(dt)
+    camera:update(dt)
     if current_room then current_room:update(dt) end
 end
 
