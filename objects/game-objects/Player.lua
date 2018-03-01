@@ -14,6 +14,19 @@ function Player:new(area, x, y, opts)
     self.v = 0
     self.max_v = 100
     self.a = 100
+
+    self.timer:every(0.24, function()
+        self:shoot()
+    end)
+end
+
+function Player:shoot()
+    local d = 1.2 * self.w
+
+    self.area:addGameObject('ShootEffect',
+        self.x + d * math.cos(self.r),
+        self.y + d * math.sin(self.r),
+        { player = self, d = d })
 end
 
 function Player:update(dt)
