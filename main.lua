@@ -23,9 +23,9 @@ function love.load()
     input:bind('right', 'right')
 
     input:bind('f1', function()
-        print("Before collection: " .. collectgarbage("count")/1024)
+        print("Before collection: " .. collectgarbage("count") / 1024)
         collectgarbage()
-        print("After collection: " .. collectgarbage("count")/1024)
+        print("After collection: " .. collectgarbage("count") / 1024)
         print("Object count: ")
         local counts = type_count()
         for k, v in pairs(counts) do print(k, v) end
@@ -33,16 +33,19 @@ function love.load()
     end)
 
     slow_amount = 1
+    flashInit()
 end
 
 function love.update(dt)
-    timer:update(dt*slow_amount)
-    camera:update(dt*slow_amount)
-    if current_room then current_room:update(dt*slow_amount) end
+    timer:update(dt * slow_amount)
+    camera:update(dt * slow_amount)
+    if current_room then current_room:update(dt * slow_amount) end
 end
 
 function love.draw()
     if current_room then current_room:draw() end
+
+    flashDraw()
 end
 
 function gotoRoom(room_type, ...)
@@ -83,7 +86,7 @@ function count_all(f)
         if seen[t] then return end
         f(t)
         seen[t] = true
-        for k,v in pairs(t) do
+        for k, v in pairs(t) do
             if type(v) == "table" then
                 count_table(v)
             elseif type(v) == "userdata" then
@@ -96,7 +99,7 @@ end
 
 function type_count()
     local counts = {}
-    local enumerate = function (o)
+    local enumerate = function(o)
         local t = type_name(o)
         counts[t] = (counts[t] or 0) + 1
     end
@@ -108,17 +111,10 @@ global_type_table = nil
 function type_name(o)
     if global_type_table == nil then
         global_type_table = {}
-        for k,v in pairs(_G) do
+        for k, v in pairs(_G) do
             global_type_table[v] = k
         end
         global_type_table[0] = "table"
     end
     return global_type_table[getmetatable(o) or 0] or "Unknown"
-end
-
-function slow(amount, duration)
-    print("slow.lua<slow> amount: " .. amount)
-
-    slow_amount = amount
-    timer:tween(duration, _G, { slow_amount = 1 }, 'in-out-cubic')
 end
