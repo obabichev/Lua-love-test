@@ -30,7 +30,7 @@ function Input.new()
     self.joysticks = love.joystick.getJoysticks()
 
     -- Register callbacks automagically
-    local callbacks = {'keypressed', 'keyreleased', 'mousepressed', 'mousereleased', 'gamepadpressed', 'gamepadreleased', 'gamepadaxis', 'wheelmoved', 'update'}
+    local callbacks = { 'keypressed', 'keyreleased', 'mousepressed', 'mousereleased', 'gamepadpressed', 'gamepadreleased', 'gamepadaxis', 'wheelmoved', 'update' }
     local old_functions = {}
     local empty_function = function() end
     for _, f in ipairs(callbacks) do
@@ -78,7 +78,7 @@ function Input:released(action)
 end
 
 function Input:sequence(...)
-    local sequence = {...}
+    local sequence = { ... }
     if #sequence <= 1 then error("Use :pressed instead if you only need to check 1 action") end
     if type(sequence[#sequence]) ~= 'string' then error("The last argument must be an action") end
     if #sequence % 2 == 0 then error("The number of arguments passed in must be odd") end
@@ -87,7 +87,7 @@ function Input:sequence(...)
     for _, seq in ipairs(sequence) do sequence_key = sequence_key .. tostring(seq) end
 
     if not self.sequences[sequence_key] then
-        self.sequences[sequence_key] = {sequence = sequence, current_index = 1}
+        self.sequences[sequence_key] = { sequence = sequence, current_index = 1 }
 
     else
         if self.sequences[sequence_key].current_index == 1 then
@@ -123,17 +123,31 @@ function Input:sequence(...)
     end
 end
 
-local key_to_button = {mouse1 = '1', mouse2 = '2', mouse3 = '3', mouse4 = '4', mouse5 = '5'} 
-local gamepad_to_button = {fdown = 'a', fup = 'y', fleft = 'x', fright = 'b', back = 'back', guide = 'guide', start = 'start',
-                           leftstick = 'leftstick', rightstick = 'rightstick', l1 = 'leftshoulder', r1 = 'rightshoulder',
-                           dpup = 'dpup', dpdown = 'dpdown', dpleft = 'dpleft', dpright = 'dpright'}
-local axis_to_button = {leftx = 'leftx', lefty = 'lefty', rightx = 'rightx', righty = 'righty', l2 = 'triggerleft', r2 = 'triggerright'}
+local key_to_button = { mouse1 = '1', mouse2 = '2', mouse3 = '3', mouse4 = '4', mouse5 = '5' }
+local gamepad_to_button = {
+    fdown = 'a',
+    fup = 'y',
+    fleft = 'x',
+    fright = 'b',
+    back = 'back',
+    guide = 'guide',
+    start = 'start',
+    leftstick = 'leftstick',
+    rightstick = 'rightstick',
+    l1 = 'leftshoulder',
+    r1 = 'rightshoulder',
+    dpup = 'dpup',
+    dpdown = 'dpdown',
+    dpleft = 'dpleft',
+    dpright = 'dpright'
+}
+local axis_to_button = { leftx = 'leftx', lefty = 'lefty', rightx = 'rightx', righty = 'righty', l2 = 'triggerleft', r2 = 'triggerright' }
 
 function Input:down(action, interval, delay)
     if action and delay and interval then
         for _, key in ipairs(self.binds[action]) do
             if self.state[key] and not self.prev_state[key] then
-                self.repeat_state[key] = {pressed_time = love.timer.getTime(), delay = delay, interval = interval, delay_stage = true}
+                self.repeat_state[key] = { pressed_time = love.timer.getTime(), delay = delay, interval = interval, delay_stage = true }
                 return true
             elseif self.repeat_state[key] and self.repeat_state[key].pressed then
                 return true
@@ -143,7 +157,7 @@ function Input:down(action, interval, delay)
     elseif action and interval and not delay then
         for _, key in ipairs(self.binds[action]) do
             if self.state[key] and not self.prev_state[key] then
-                self.repeat_state[key] = {pressed_time = love.timer.getTime(), delay = 0, interval = interval, delay_stage = false}
+                self.repeat_state[key] = { pressed_time = love.timer.getTime(), delay = 0, interval = interval, delay_stage = false }
                 return true
             elseif self.repeat_state[key] and self.repeat_state[key].pressed then
                 return true
@@ -155,7 +169,7 @@ function Input:down(action, interval, delay)
             if (love.keyboard.isDown(key) or love.mouse.isDown(key_to_button[key] or 0)) then
                 return true
             end
-            
+
             -- Supports only 1 gamepad, add more later...
             if self.joysticks[1] then
                 if axis_to_button[key] then
@@ -198,11 +212,11 @@ function Input:update()
 
     for k, v in pairs(self.repeat_state) do
         if v then
-            v.pressed = false 
+            v.pressed = false
             local t = love.timer.getTime() - v.pressed_time
-            if v.delay_stage then 
-                if t > v.delay then 
-                    v.pressed = true 
+            if v.delay_stage then
+                if t > v.delay then
+                    v.pressed = true
                     v.pressed_time = love.timer.getTime()
                     v.delay_stage = false
                 end
@@ -225,7 +239,7 @@ function Input:keyreleased(key)
     self.repeat_state[key] = false
 end
 
-local button_to_key = {[1] = 'mouse1', [2] = 'mouse2', [3] = 'mouse3', [4] = 'mouse4', [5] = 'mouse5'}
+local button_to_key = { [1] = 'mouse1', [2] = 'mouse2', [3] = 'mouse3', [4] = 'mouse4', [5] = 'mouse5' }
 
 function Input:mousepressed(x, y, button)
     self.state[button_to_key[button]] = true
@@ -238,15 +252,30 @@ end
 
 function Input:wheelmoved(x, y)
     if y > 0 then self.state['wheelup'] = true
-    elseif y < 0 then self.state['wheeldown'] = true end
+    elseif y < 0 then self.state['wheeldown'] = true
+    end
 end
 
-local button_to_gamepad = {a = 'fdown', y = 'fup', x = 'fleft', b = 'fright', back = 'back', guide = 'guide', start = 'start',
-                           leftstick = 'leftstick', rightstick = 'rightstick', leftshoulder = 'l1', rightshoulder = 'r1',
-                           dpup = 'dpup', dpdown = 'dpdown', dpleft = 'dpleft', dpright = 'dpright'}
+local button_to_gamepad = {
+    a = 'fdown',
+    y = 'fup',
+    x = 'fleft',
+    b = 'fright',
+    back = 'back',
+    guide = 'guide',
+    start = 'start',
+    leftstick = 'leftstick',
+    rightstick = 'rightstick',
+    leftshoulder = 'l1',
+    rightshoulder = 'r1',
+    dpup = 'dpup',
+    dpdown = 'dpdown',
+    dpleft = 'dpleft',
+    dpright = 'dpright'
+}
 
 function Input:gamepadpressed(joystick, button)
-    self.state[button_to_gamepad[button]] = true 
+    self.state[button_to_gamepad[button]] = true
 end
 
 function Input:gamepadreleased(joystick, button)
@@ -254,10 +283,10 @@ function Input:gamepadreleased(joystick, button)
     self.repeat_state[button_to_gamepad[button]] = false
 end
 
-local button_to_axis = {leftx = 'leftx', lefty = 'lefty', rightx = 'rightx', righty = 'righty', triggerleft = 'l2', triggerright = 'r2'}
+local button_to_axis = { leftx = 'leftx', lefty = 'lefty', rightx = 'rightx', righty = 'righty', triggerleft = 'l2', triggerright = 'r2' }
 
 function Input:gamepadaxis(joystick, axis, newvalue)
     self.state[button_to_axis[axis]] = newvalue
 end
 
-return setmetatable({}, {__call = function(_, ...) return Input.new(...) end})
+return setmetatable({}, { __call = function(_, ...) return Input.new(...) end })
