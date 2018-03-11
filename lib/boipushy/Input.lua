@@ -50,6 +50,7 @@ function Input:bind(key, action)
     table.insert(self.binds[action], key)
 end
 
+
 function Input:pressed(action)
     if action then
         for _, key in ipairs(self.binds[action]) do
