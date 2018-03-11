@@ -21,6 +21,8 @@ function love.load()
 
     input:bind('left', 'left')
     input:bind('right', 'right')
+    input:bind('up', 'up')
+    input:bind('down', 'down')
 
     input:bind('f1', function()
         print("Before collection: " .. collectgarbage("count") / 1024)
