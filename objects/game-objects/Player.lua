@@ -20,6 +20,8 @@ function Player:new(area, x, y, opts)
     end)
 
     input:bind('f3', function() self:die() end)
+
+    self.timer:every(5, function() self:tick() end)
 end
 
 function Player:shoot()
@@ -68,4 +70,8 @@ function Player:die()
     for i = 1, love.math.random(8, 12) do
         self.area:addGameObject('ExplodeParticle', self.x, self.y)
     end
+end
+
+function Player:tick()
+    self.area:addGameObject('TickEffect', self.x, self.y, { parent = self })
 end
