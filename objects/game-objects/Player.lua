@@ -61,6 +61,7 @@ function Player:destroy()
 end
 
 function Player:die()
+    slow(0.15, 1)
     self.dead = true
     for i = 1, love.math.random(8, 12) do
         self.area:addGameObject('ExplodeParticle', self.x, self.y)

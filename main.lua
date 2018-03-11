@@ -31,12 +31,14 @@ function love.load()
         for k, v in pairs(counts) do print(k, v) end
         print("-------------------------------------")
     end)
+
+    slow_amount = 1
 end
 
 function love.update(dt)
-    timer:update(dt)
-    camera:update(dt)
-    if current_room then current_room:update(dt) end
+    timer:update(dt*slow_amount)
+    camera:update(dt*slow_amount)
+    if current_room then current_room:update(dt*slow_amount) end
 end
 
 function love.draw()
@@ -112,4 +114,11 @@ function type_name(o)
         global_type_table[0] = "table"
     end
     return global_type_table[getmetatable(o) or 0] or "Unknown"
+end
+
+function slow(amount, duration)
+    print("slow.lua<slow> amount: " .. amount)
+
+    slow_amount = amount
+    timer:tween(duration, _G, { slow_amount = 1 }, 'in-out-cubic')
 end
