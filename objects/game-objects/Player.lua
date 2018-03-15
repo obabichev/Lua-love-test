@@ -8,6 +8,7 @@ function Player:new(area, x, y, opts)
     self.w, self.h = 12, 12
     self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)
     self.collider:setObject(self)
+    self.collider:setCollisionClass('Player')
 
     self.r = -math.pi / 2
     self.rv = 1.66 * math.pi
@@ -147,6 +148,15 @@ function Player:update(dt)
 
     self.v = math.min(self.v + self.a * dt, self.max_v)
     self.collider:setLinearVelocity(self.v * math.cos(self.r), self.v * math.sin(self.r))
+
+    if self.collider:enter('Collectable') then
+        local collision_data = self.collider:getEnterCollisionData('Collectable')
+        local object = collision_data.collider:getObject()
+        if object:is(Ammo) then
+            self:addAmmo(5)
+            object:die()
+        end
+    end
 end
 
 function Player:draw()
@@ -181,4 +191,8 @@ end
 
 function Player:tick()
     self.area:addGameObject('TickEffect', self.x, self.y, { parent = self })
+end
+
+function Player:addAmmo(amount)
+    self.ammo = math.min(self.ammo + amount, self.max_ammo)
 end

@@ -3,6 +3,8 @@ Input = require 'lib/boipushy/input'
 Timer = require 'lib/hump/timer'
 Camera = require 'lib/hump/camera'
 Physics = require 'lib/windfield/windfield/init'
+Draft = require('lib/draft/draft')
+require('lib/vector/Vector')
 
 function love.load()
     love.graphics.setDefaultFilter('nearest')
@@ -16,6 +18,7 @@ function love.load()
     timer = Timer()
     input = Input()
     camera = Camera()
+    draft = Draft()
 
     current_room = Stage()
 
@@ -23,6 +26,7 @@ function love.load()
     input:bind('right', 'right')
     input:bind('up', 'up')
     input:bind('down', 'down')
+    input:bind('p', 'p')
 
     input:bind('f1', function()
         print("Before collection: " .. collectgarbage("count") / 1024)
