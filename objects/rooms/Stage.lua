@@ -14,7 +14,7 @@ function Stage:new()
     input:bind('f4', function() self.player = self.area:addGameObject('Player', gw / 2, gh / 2) end)
 
     input:bind('p', function()
-        self.area:addGameObject('Ammo', random(0, gw), random(0, gh))
+        self.area:addGameObject('Boost', random(0, gw), random(0, gh))
     end)
 
     self.player = self.area:addGameObject('Player', gw / 2, gh / 2)

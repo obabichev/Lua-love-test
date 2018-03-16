@@ -156,6 +156,10 @@ function Player:update(dt)
             self:addAmmo(5)
             object:die()
         end
+        if object:is(Boost) then
+            self:addBoost(5)
+            object:die()
+        end
     end
 end
 
@@ -195,4 +199,8 @@ end
 
 function Player:addAmmo(amount)
     self.ammo = math.min(self.ammo + amount, self.max_ammo)
+end
+
+function Player:addBoost(amount)
+    self.boost = math.min(self.boost + amount, self.max_boost)
 end
